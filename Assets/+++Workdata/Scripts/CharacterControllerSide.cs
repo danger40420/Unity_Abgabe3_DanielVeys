@@ -22,6 +22,8 @@ public class CharacterControllerSide : MonoBehaviour
     bool canMove = false; // Controls whether player movement is allowed
     private bool isGrounded = false; // Whether the player is touching the ground
 
+    private Vector3 startPosition; // 🔁 Store player's initial spawn position
+
     private Rigidbody2D rb;
 
     [Header("GroundCheck")]
@@ -36,11 +38,25 @@ public class CharacterControllerSide : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>(); // Get Rigidbody2D component
         rb.gravityScale = normalGravity; // Set initial gravity
+
+        startPosition = transform.position; // 🔁 Save the initial position for resets
     }
 
     public void EnableMovement()
     {
         canMove = true; // Allow the player to start moving
+    }
+
+    public void DisableMovement()
+    {
+        canMove = false; // Stop movement input
+        rb.linearVelocity = Vector2.zero; // Stop motion
+    }
+
+    public void ResetToStartPosition() // 🔁 Public method to reset player to original location
+    {
+        transform.position = startPosition; // Move player back to start
+        rb.linearVelocity = Vector2.zero; // Clear motion
     }
 
     void Update()
@@ -118,6 +134,14 @@ public class CharacterControllerSide : MonoBehaviour
         {
             Debug.Log("It was a Trap!");
             uiManager.ShowPanelLost(); // Trigger the "you lost" panel
+            rb.linearVelocity = Vector2.zero; // Stop all player movement
+            canMove = false; // Disable further input/movement
+        }
+
+        if (other.CompareTag("Goal"))
+        {
+            Debug.Log("You won!");
+            uiManager.ShowPanelWin(); // Trigger the "you win" panel
             rb.linearVelocity = Vector2.zero; // Stop all player movement
             canMove = false; // Disable further input/movement
         }

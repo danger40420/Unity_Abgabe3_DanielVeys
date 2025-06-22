@@ -23,7 +23,8 @@ public class UIManager : MonoBehaviour
 
     [Header("Timer")]
     [SerializeField] private TextMeshProUGUI textTimerUI;
-    [SerializeField] private TextMeshProUGUI textTimerResultUI;
+    [SerializeField] private TextMeshProUGUI textTimerResultLoseUI;
+    [SerializeField] private TextMeshProUGUI textTimerResultWinUI;
 
     private float timeElapsed = 0f;
     private bool isTiming = false;
@@ -113,9 +114,9 @@ public class UIManager : MonoBehaviour
     public void ShowPanelLost()
     {
         isTiming = false;
-        if (textTimerResultUI != null)
+        if (textTimerResultLoseUI != null)
         {
-            textTimerResultUI.text = "Time: " + FormatTime(timeElapsed);
+            textTimerResultLoseUI.text = "Time: " + FormatTime(timeElapsed);
         }
         panelLost.SetActive(true);
     }
@@ -123,10 +124,11 @@ public class UIManager : MonoBehaviour
     public void ShowPanelWin()
     {
         isTiming = false;
-        if (textTimerResultUI != null)
+        if (textTimerResultWinUI != null)
         {
-            textTimerResultUI.text = "Time: " + FormatTime(timeElapsed);
+            textTimerResultWinUI.text = "Time: " + FormatTime(timeElapsed);
         }
+        playerController.ResetToStartPosition();
         panelWin.SetActive(true);
     }
 
